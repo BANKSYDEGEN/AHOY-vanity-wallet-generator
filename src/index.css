@@ -1,0 +1,21 @@
+@import "tailwindcss";
+@import "@fontsource/just-another-hand";
+@import "@fontsource/poppins/400.css";
+@import "@fontsource/poppins/600.css";
+
+@theme {
+  --color-blood: #fa0d0d;
+  --color-sand: #ffcd77;
+  --color-ink: #161616;
+  --color-mahogany: #583e3d;
+  --font-hand: "Just Another Hand", cursive;
+  --font-body: "Poppins", sans-serif;
+}
+
+body { background: #000 url(./assets/bg.webp) center / cover; font-family: var(--font-body); color: var(--color-ink); }
+.wood { background: url(./assets/wood.webp) center / 100% 100% no-repeat; filter: drop-shadow(0 8px 8px #0000005b); }
+.paper { background: url(./assets/paper.webp) center / cover; filter: drop-shadow(0 8px 8px #0000005b); }
+.red-btn { background: url(./assets/red_btn.webp) center / 100% 100% no-repeat; }
+.sway { animation: sway 1s infinite ease-in-out alternate-reverse; transform-origin: top; }
+@keyframes sway { from { transform: skew(2deg); } to { transform: skew(-2deg); } }
+@media (prefers-reduced-motion: reduce) { .sway { animation: none; } }
