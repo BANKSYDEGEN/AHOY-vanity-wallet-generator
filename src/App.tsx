@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { expectedAttempts, validatePattern, type Chain, type Wallet, type WordCount } from './lib/wallet'
 import logo from './assets/logo.webp'
+import { drawQr, seedQrText, wipeCanvas } from './lib/qr'
 import WalletWorker from './lib/worker.ts?worker&inline'
 
 const OFFLINE_BUILD = import.meta.env.MODE === 'offline'
@@ -74,6 +75,45 @@ function Words({ mnemonic }: { mnemonic: string }) {
       <ol data-secret {...noCopy} className={`grid grid-cols-3 gap-2 ${secretBox} sm:grid-cols-4 ${show ? '' : 'blur-sm'}`}>
         {mnemonic.split(' ').map((w, i) => <li key={i} className="rounded bg-white/40 px-2 py-1"><span className="mr-1 text-mahogany/60">{i + 1}.</span><span className="font-semibold">{w}</span></li>)}
       </ol>
+    </div>
+  )
+}
+
+function QrCanvas({ text, label }: { text: string; label: string }) {
+  const ref = useRef<HTMLCanvasElement>(null)
+  useEffect(() => {
+    const c = ref.current
+    if (c) drawQr(c, text).catch(() => {})
+    return () => wipeCanvas(c)
+  }, [text])
+  return <canvas ref={ref} aria-label={label} {...noCopy} className="mx-auto block max-w-full bg-white [-webkit-touch-callout:none]" />
+}
+
+// Seed QR: not rendered at all until revealed; auto-hides like the words, and is unmounted (canvas wiped) on hide or Clear.
+function SeedQr({ mnemonic }: { mnemonic: string }) {
+  const [show, setShow] = useReveal()
+  return (
+    <div className="mt-4">
+      <div className="mb-1 flex items-center justify-between">
+        <span className={`${hand} text-3xl text-mahogany`}>Seed phrase QR</span>
+        <button onClick={() => setShow(!show)} className={btn}>{show ? 'Hide seed QR' : 'Show seed QR'}</button>
+      </div>
+      <p className="mb-2 rounded bg-blood/10 p-2 text-sm font-semibold text-blood">⚠ Never photograph or screenshot this QR. It holds yer whole seed phrase. Only scan it straight into a trusted wallet, or print it on a printer that's offline.</p>
+      <div data-secret {...noCopy} className={`${secretBox} flex min-h-[200px] items-center justify-center`}>
+        {show
+          ? <QrCanvas text={seedQrText(mnemonic)} label="Seed phrase QR code" />
+          : <div aria-hidden className="h-[180px] w-[180px] bg-[repeating-linear-gradient(45deg,#0003_0_8px,transparent_8px_16px)] blur-sm" />}
+      </div>
+    </div>
+  )
+}
+
+function AddressQr({ address }: { address: string }) {
+  const [show, setShow] = useState(false)
+  return (
+    <div className="mt-2">
+      <button onClick={() => setShow(!show)} className={btn}>{show ? 'Hide address QR' : 'Address QR'}</button>
+      {show && <div className="mt-2"><QrCanvas text={address} label="Public address QR code" /></div>}
     </div>
   )
 }
@@ -247,6 +287,7 @@ export default function App() {
             <section id="result" className="paper px-6 py-6 sm:px-10">
               <h2 className={`${hand} text-5xl text-blood`}>☠ Treasure found after {attempts.toLocaleString()} attempts!</h2>
               <div className="mt-3 flex items-center justify-between"><p className={`${hand} text-3xl text-mahogany`}>Address (public, safe to share)</p><AddressCopy address={result.address} /></div>
+              <AddressQr address={result.address} />
               <p className="break-all font-mono text-lg font-semibold">{result.address}</p>
               <p className="mt-1 text-xs text-mahogany">Derivation path {result.path} ({result.chain === 'solana' ? 'Phantom' : 'MetaMask'} default)</p>
               <div className="mt-4 space-y-3">
@@ -254,6 +295,7 @@ export default function App() {
                 <SafetyChecklist title="⚠ Before ye press Reveal" />
               </div>
               <Words mnemonic={result.mnemonic} />
+              <SeedQr mnemonic={result.mnemonic} />
               <Secret label={result.chain === 'solana' ? 'Private key (base58)' : 'Private key (hex)'} value={result.privateKey} />
               {result.secretKeyJson && <Secret label="Secret key JSON byte array" value={result.secretKeyJson} />}
               <p className="mt-4 text-sm font-semibold text-blood">✍ Write it on paper. Copyin' be disabled for secrets on purpose, and they hide again after 60 seconds or when ye leave this tab.</p>

@@ -29,6 +29,8 @@ When it finds a match you can export:
 - the private key (Solana: base58 64-byte secret key and the JSON byte array; EVM: hex),
 - each one behind a **Reveal** toggle (no Copy button: secrets can't be copied, cut, dragged or right-clicked, and they re-blur after 60 s or when you switch tabs). Write them on paper.
 
+**Seed QR:** a hidden-by-default **Show seed QR** option draws the seed words (space-separated) as a QR code with the bundled [`qrcode`](https://www.npmjs.com/package/qrcode) library on a local canvas. There are no network calls and the CSP is unchanged. It has the same protections as the words: nothing is drawn until you reveal it, it hides again after 60 s or when you leave the tab, right-click/drag/save are blocked, and **Clear** wipes it. **Never photograph or screenshot it**; only scan it straight into a trusted wallet or print it on an offline printer. The public address has its own QR, which is safe to share.
+
 Only the public address has a Copy button. **Clear wallet from memory** wipes the result from the page.
 
 Seed derivation (PBKDF2) is slow: about 100 attempts/s per core. Each extra character multiplies the search time by about 58 for Solana or 16 for EVM.
