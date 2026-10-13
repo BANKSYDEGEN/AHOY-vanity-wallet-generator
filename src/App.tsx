@@ -124,11 +124,13 @@ function AddressCopy({ address }: { address: string }) {
 }
 
 const SAFETY_RULES: [string, string][] = [
-  ['Cut the anchor line first.', 'Before forgin\' a wallet for real funds, turn off Wi-Fi or unplug the cable. Runnin\' the downloaded offline copy is safest.'],
-  ['Ink it on paper.', 'Write the seed words on paper, by hand. Never screenshot or photograph them, never copy them to the clipboard, and never save them to the cloud, a notes app or a password manager that syncs online.'],
-  ['Close the hatch before sailin\' on.', 'Close this tab or app before ye go back online.'],
-  ['Clean ship, no stowaways.', 'Use a clean device and turn off browser extensions (or open a fresh browser profile).'],
-  ['The words ARE the treasure.', 'Anyone with yer seed phrase owns the wallet. Never share it with any soul, not even "support".'],
+  ['Cut the anchor line first.', 'Before forgin\' a wallet for real funds, turn off Wi-Fi or unplug the cable, and use the downloaded offline copy. Why: with no connection, nothing on the computer can send yer seed anywhere while it be on screen.'],
+  ['Ink it on paper.', 'Write the seed words on paper, by hand. Never screenshot or photograph them, never copy them to the clipboard, and never save them to the cloud, a notes app or a password manager that syncs online. Why: photos, clipboards and notes get synced and backed up, and other apps can read them. Paper can\'t be hacked.'],
+  ['Never type it into a website.', 'Only type yer seed into the wallet app ye be importin\' it into. Why: any site or "support" agent askin\' for it be a thief.'],
+  ['Close the hatch before sailin\' on.', 'Close this tab or app before ye go back online. Why: the wallet only lives in this page\'s memory, so closin\' it wipes it before any connection returns.'],
+  ['Clean ship, no stowaways.', 'Use a clean device and turn off browser extensions (or open a fresh browser profile). Why: malware and extensions can read the screen and page; goin\' offline doesn\'t stop them seein\' it.'],
+  ['Only from the official port.', 'Get this tool only from banksydegen.github.io/AHOY-vanity-wallet-generator. Why: a tampered copy could look identical but quietly use weak randomness or save yer seed.'],
+  ['The words ARE the treasure.', 'Anyone with yer seed phrase owns the wallet. Never share it with any soul, not even "support". Lose it and the treasure be gone forever: nobody, us included, can recover it.'],
   ['Big hoard? Use a vault.', 'For large amounts, prefer a hardware wallet. This tool has not been audited by a third party.'],
 ]
 
@@ -219,11 +221,19 @@ export default function App() {
           <img src={logo} alt="PumpFun Pirates captain" className="sway w-full max-w-sm rounded-b-full border-t-[20px] border-b-8 border-t-ink border-b-blood drop-shadow-[0_10px_10px_#00000040]" />
           <div className="paper w-full max-w-sm p-5">
             <p className={`${hand} text-3xl text-blood`}>⚠ Guard yer treasure, matey</p>
-            <p className="mt-1 text-sm">Keys be forged right here in yer browser and never leave this page: no backend, no analytics, no network calls. Never share yer seed phrase or private key with any soul, and stow it somewhere safe.</p>
+            <p className="mt-1 text-sm">Keys be forged right here in yer browser and never leave this page: no backend, no analytics, no storage, and the page's security policy (<code>connect-src 'none'</code>) blocks it from sendin' anything out. The real danger be in the handlin', not the maths: anyone who sees yer seed phrase owns the wallet.</p>
+          </div>
+          <div className="paper w-full max-w-sm p-5">
+            <p className={`${hand} text-3xl text-blood`}>🗝 Where yer wallet comes from</p>
+            <ul className="mt-1 list-disc space-y-1 pl-5 text-sm">
+              <li><strong>Brand-new, not from a list.</strong> Each wallet starts from 128 bits (12 words) or 256 bits (24 words) of fresh randomness from yer browser's secure generator (<code>crypto.getRandomValues</code>).</li>
+              <li><strong>Nobody else will forge it.</strong> 12 words alone allow 2<sup>128</sup> wallets, about 340 trillion trillion trillion, so the chance anyone ever makes the same one be effectively zero.</li>
+              <li><strong>Nothing be kept.</strong> It isn't saved or sent anywhere, so no one can look it up later. Lose the seed phrase and the funds be gone forever.</li>
+            </ul>
           </div>
           <div className="paper w-full max-w-sm p-5">
             <p className={`${hand} text-3xl text-blood`}>{OFFLINE_BUILD ? '⚓ Ye be sailin\' offline' : '⚓ For real booty, go offline'}</p>
-            <p className="mt-1 text-sm"><strong>Why offline?</strong> A computer with no internet can't leak yer keys to anyone, even by accident.</p>
+            <p className="mt-1 text-sm"><strong>Why offline?</strong> With no internet, nothing on the computer can send yer keys anywhere while ye work.</p>
             <ol className="mt-2 list-decimal space-y-1 pl-5 text-sm">
               <li><strong>Download</strong> the offline file with the big red button below. It's one file, nothing to install.</li>
               <li><strong>Disconnect</strong> from the internet (turn off Wi-Fi or unplug the cable).</li>

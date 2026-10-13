@@ -35,25 +35,33 @@ Only the public address has a Copy button. **Clear wallet from memory** wipes th
 
 Seed derivation (PBKDF2) is slow: about 100 attempts/s per core. Each extra character multiplies the search time by about 58 for Solana or 16 for EVM.
 
+## Where your wallet comes from
+- **Brand-new, not picked from a list.** Each attempt draws 128 bits (12 words) or 256 bits (24 words) of fresh randomness from the browser's `crypto.getRandomValues` (via `@scure/bip39` → `@noble/hashes` `randomBytes`).
+- **Nobody else will generate it.** 12 words alone allow 2^128 (about 3.4 × 10^38, or 340 trillion trillion trillion) possible wallets; 24 words allow 2^256. The chance anyone ever generates the same one is effectively zero.
+- **Nothing is stored or sent.** The code uses no storage (no localStorage, cookies or IndexedDB) and makes no network requests, and the CSP sets `connect-src 'none'`. The wallet exists only in the open page, so nobody can look it up again: **if you lose the seed phrase, the funds are gone forever.**
+- **The real risk is handling, not math.** Anyone who sees the seed phrase controls the wallet. It leaks through screenshots, cloud-synced notes, the clipboard, malware or extensions, and tampered copies of this site. That's why the rules below exist.
+
 ## ☠ The Pirate's Code: stay safe with real treasure
 Read this before ye generate a wallet that will hold real funds.
 
-1. **Cut the anchor line first.** Turn off Wi-Fi or unplug the cable *before* you generate a wallet for real funds. Running the downloaded offline copy (see below) is the safest way.
-2. **Ink it on paper.** Write the seed words on paper, by hand. **Never** screenshot or photograph them, copy them to the clipboard, or save them to the cloud, a notes app, or a password manager that syncs online.
-3. **Close the hatch before sailing on.** Close the tab or app *before* you reconnect to the internet.
-4. **Clean ship, no stowaways.** Use a clean device and disable browser extensions (or use a fresh browser profile).
-5. **The words ARE the treasure.** Anyone with your seed phrase owns the wallet. Never share it with anyone, including "support".
-6. **Big hoard? Use a vault.** For large amounts, prefer a hardware wallet. This tool has **not** been audited by a third party (the crypto libraries it uses are audited; this app is not).
+1. **Cut the anchor line first.** Turn off Wi-Fi or unplug the cable *before* you generate a wallet for real funds, and use the downloaded offline copy (see below). *Why:* with no connection, nothing on the computer can send your seed anywhere while it's on screen.
+2. **Ink it on paper.** Write the seed words on paper, by hand. **Never** screenshot or photograph them, copy them to the clipboard, or save them to the cloud, a notes app, or a password manager that syncs online. *Why:* photos, clipboards and notes get synced and backed up, and other apps can read them. Paper can't be hacked.
+3. **Never type it into a website.** Only enter your seed into the wallet app you're importing it into. *Why:* any site or "support" agent asking for it is a thief.
+4. **Close the hatch before sailing on.** Close the tab or app *before* you reconnect to the internet. *Why:* the wallet only lives in the page's memory, so closing it wipes it before any connection returns.
+5. **Clean ship, no stowaways.** Use a clean device and disable browser extensions (or use a fresh browser profile). *Why:* malware and extensions can read the screen and the page, and going offline doesn't stop that.
+6. **Only from the official port.** Get the site or offline file only from `https://banksydegen.github.io/AHOY-vanity-wallet-generator/`. *Why:* a tampered copy could look identical but quietly use weak randomness or save your seed.
+7. **The words ARE the treasure.** Anyone with your seed phrase owns the wallet. Never share it with anyone, including "support". Lose it and the funds are gone forever: nobody can recover it.
+8. **Big hoard? Use a vault.** For large amounts, prefer a hardware wallet. This tool has **not** been audited by a third party (the crypto libraries it uses are audited; this app is not).
 
 The app shows this checklist next to the **Hunt for Treasure** button and again on the result screen before you reveal anything, along with a live online/offline indicator (red while you're online, green once you're offline).
 
 ## Security
-- 100% client-side. There is no backend and no analytics. A Content-Security-Policy sets `connect-src 'none'`, so the page cannot make network requests.
+- 100% client-side. There is no backend, no analytics and no storage. A Content-Security-Policy sets `connect-src 'none'`, so the page cannot send data out (fetch, XHR, WebSocket, beacons).
 - It uses only audited libraries from the [noble/scure](https://paulmillr.com/noble/) family. There is no custom cryptography.
 - Never share your seed phrase or private key.
 
 ## Run it offline (recommended for real funds)
-A computer with no internet can't leak your keys to anyone, even by accident.
+With no internet, nothing on the computer can send your keys anywhere while you work.
 
 1. **Download** the offline version: [AHOY-vanity-wallet-generator-offline.html](https://banksydegen.github.io/AHOY-vanity-wallet-generator/AHOY-vanity-wallet-generator-offline.html) (or use the big **Download offline version** button on the site). It's a single file with nothing to install.
 2. **Disconnect** from the internet (turn off Wi-Fi or unplug the cable).
