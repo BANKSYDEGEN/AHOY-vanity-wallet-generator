@@ -20,50 +20,72 @@ function fmtTime(s: number) {
 const hand = 'font-hand leading-none'
 const btn = `${hand} bg-mahogany px-4 py-1 text-2xl text-white hover:brightness-125 disabled:opacity-40`
 
-function useCopy(): [boolean, (v: string) => void] {
+const AUTO_HIDE_MS = 60_000
+
+// Secrets are never put on the clipboard: no Copy button, and copy/cut/context-menu/drag are blocked.
+const block = (e: React.SyntheticEvent) => e.preventDefault()
+const noCopy = { onCopy: block, onCut: block, onContextMenu: block, onDragStart: block, draggable: false }
+
+function useAddressCopy(): [boolean, (v: string) => void] {
   const [copied, setCopied] = useState(false)
   return [copied, (v) => { navigator.clipboard.writeText(v); setCopied(true); setTimeout(() => setCopied(false), 1500) }]
 }
 
-function Header({ label, show, setShow, copied, copy }: { label: string; show: boolean; setShow: (b: boolean) => void; copied: boolean; copy: () => void }) {
+// Reveal toggle that re-blurs after AUTO_HIDE_MS or whenever the tab is hidden.
+function useReveal(): [boolean, (b: boolean) => void] {
+  const [show, setShow] = useState(false)
+  useEffect(() => {
+    if (!show) return
+    const t = setTimeout(() => setShow(false), AUTO_HIDE_MS)
+    const onVis = () => { if (document.hidden) setShow(false) }
+    document.addEventListener('visibilitychange', onVis)
+    window.addEventListener('blur', onVis)
+    return () => { clearTimeout(t); document.removeEventListener('visibilitychange', onVis); window.removeEventListener('blur', onVis) }
+  }, [show])
+  return [show, setShow]
+}
+
+function Header({ label, show, setShow }: { label: string; show: boolean; setShow: (b: boolean) => void }) {
   return (
     <div className="mb-1 flex items-center justify-between">
       <span className={`${hand} text-3xl text-mahogany`}>{label}</span>
-      <span className="flex gap-2">
-        <button onClick={() => setShow(!show)} className={btn}>{show ? 'Hide' : 'Reveal'}</button>
-        <button onClick={copy} className={btn}>{copied ? 'Copied!' : 'Copy'}</button>
-      </span>
+      <button onClick={() => setShow(!show)} className={btn}>{show ? 'Hide' : 'Reveal'}</button>
     </div>
   )
 }
 
+const secretBox = 'select-none rounded border-2 border-mahogany/40 bg-sand/30 p-3 font-mono text-sm [-webkit-touch-callout:none] [-webkit-user-select:none]'
+
 function Secret({ label, value }: { label: string; value: string }) {
-  const [show, setShow] = useState(false)
-  const [copied, copy] = useCopy()
+  const [show, setShow] = useReveal()
   return (
     <div className="mt-4">
-      <Header label={label} show={show} setShow={setShow} copied={copied} copy={() => copy(value)} />
-      <div className={`break-all rounded border-2 border-mahogany/40 bg-sand/30 p-3 font-mono text-sm ${show ? 'text-ink' : 'select-none blur-sm'}`}>{value}</div>
+      <Header label={label} show={show} setShow={setShow} />
+      <div data-secret {...noCopy} className={`break-all ${secretBox} ${show ? 'text-ink' : 'blur-sm'}`}>{value}</div>
     </div>
   )
 }
 
 function Words({ mnemonic }: { mnemonic: string }) {
-  const [show, setShow] = useState(false)
-  const [copied, copy] = useCopy()
+  const [show, setShow] = useReveal()
   return (
     <div className="mt-4">
-      <Header label={`${mnemonic.split(' ').length}-word seed phrase (BIP39)`} show={show} setShow={setShow} copied={copied} copy={() => copy(mnemonic)} />
-      <ol className={`grid grid-cols-3 gap-2 rounded border-2 border-mahogany/40 bg-sand/30 p-3 font-mono text-sm sm:grid-cols-4 ${show ? '' : 'select-none blur-sm'}`}>
+      <Header label={`${mnemonic.split(' ').length}-word seed phrase (BIP39)`} show={show} setShow={setShow} />
+      <ol data-secret {...noCopy} className={`grid grid-cols-3 gap-2 ${secretBox} sm:grid-cols-4 ${show ? '' : 'blur-sm'}`}>
         {mnemonic.split(' ').map((w, i) => <li key={i} className="rounded bg-white/40 px-2 py-1"><span className="mr-1 text-mahogany/60">{i + 1}.</span><span className="font-semibold">{w}</span></li>)}
       </ol>
     </div>
   )
 }
 
+function AddressCopy({ address }: { address: string }) {
+  const [copied, copy] = useAddressCopy()
+  return <button onClick={() => copy(address)} className={btn}>{copied ? 'Copied!' : 'Copy address'}</button>
+}
+
 const SAFETY_RULES: [string, string][] = [
   ['Cut the anchor line first.', 'Before forgin\' a wallet for real funds, turn off Wi-Fi or unplug the cable. Runnin\' the downloaded offline copy is safest.'],
-  ['Ink it on paper.', 'Write the 24 words down by hand. Never screenshot or photograph them, never copy them to the clipboard, and never save them to the cloud, a notes app or a password manager that syncs online.'],
+  ['Ink it on paper.', 'Write the seed words on paper, by hand. Never screenshot or photograph them, never copy them to the clipboard, and never save them to the cloud, a notes app or a password manager that syncs online.'],
   ['Close the hatch before sailin\' on.', 'Close this tab or app before ye go back online.'],
   ['Clean ship, no stowaways.', 'Use a clean device and turn off browser extensions (or open a fresh browser profile).'],
   ['The words ARE the treasure.', 'Anyone with yer seed phrase owns the wallet. Never share it with any soul, not even "support".'],
@@ -224,7 +246,7 @@ export default function App() {
           {result && (
             <section id="result" className="paper px-6 py-6 sm:px-10">
               <h2 className={`${hand} text-5xl text-blood`}>☠ Treasure found after {attempts.toLocaleString()} attempts!</h2>
-              <p className={`${hand} mt-3 text-3xl text-mahogany`}>Address</p>
+              <div className="mt-3 flex items-center justify-between"><p className={`${hand} text-3xl text-mahogany`}>Address (public, safe to share)</p><AddressCopy address={result.address} /></div>
               <p className="break-all font-mono text-lg font-semibold">{result.address}</p>
               <p className="mt-1 text-xs text-mahogany">Derivation path {result.path} ({result.chain === 'solana' ? 'Phantom' : 'MetaMask'} default)</p>
               <div className="mt-4 space-y-3">
@@ -234,6 +256,8 @@ export default function App() {
               <Words mnemonic={result.mnemonic} />
               <Secret label={result.chain === 'solana' ? 'Private key (base58)' : 'Private key (hex)'} value={result.privateKey} />
               {result.secretKeyJson && <Secret label="Secret key JSON byte array" value={result.secretKeyJson} />}
+              <p className="mt-4 text-sm font-semibold text-blood">✍ Write it on paper. Copyin' be disabled for secrets on purpose, and they hide again after 60 seconds or when ye leave this tab.</p>
+              <button onClick={() => { setResult(null); setAttempts(0); setRate(0); total.current = 0 }} className={`${hand} mt-4 w-full bg-ink py-2 text-3xl text-white hover:brightness-125`}>☠ Clear wallet from memory</button>
             </section>
           )}
         </div>

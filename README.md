@@ -27,7 +27,9 @@ The search runs in parallel, with one Web Worker per `navigator.hardwareConcurre
 When it finds a match you can export:
 - the 12- or 24-word seed phrase,
 - the private key (Solana: base58 64-byte secret key and the JSON byte array; EVM: hex),
-- each one behind a reveal/copy toggle.
+- each one behind a **Reveal** toggle (no Copy button: secrets can't be copied, cut, dragged or right-clicked, and they re-blur after 60 s or when you switch tabs). Write them on paper.
+
+Only the public address has a Copy button. **Clear wallet from memory** wipes the result from the page.
 
 Seed derivation (PBKDF2) is slow: about 100 attempts/s per core. Each extra character multiplies the search time by about 58 for Solana or 16 for EVM.
 
@@ -35,7 +37,7 @@ Seed derivation (PBKDF2) is slow: about 100 attempts/s per core. Each extra char
 Read this before ye generate a wallet that will hold real funds.
 
 1. **Cut the anchor line first.** Turn off Wi-Fi or unplug the cable *before* you generate a wallet for real funds. Running the downloaded offline copy (see below) is the safest way.
-2. **Ink it on paper.** Write the 24 words down by hand. **Never** screenshot or photograph them, copy them to the clipboard, or save them to the cloud, a notes app, or a password manager that syncs online.
+2. **Ink it on paper.** Write the seed words on paper, by hand. **Never** screenshot or photograph them, copy them to the clipboard, or save them to the cloud, a notes app, or a password manager that syncs online.
 3. **Close the hatch before sailing on.** Close the tab or app *before* you reconnect to the internet.
 4. **Clean ship, no stowaways.** Use a clean device and disable browser extensions (or use a fresh browser profile).
 5. **The words ARE the treasure.** Anyone with your seed phrase owns the wallet. Never share it with anyone, including "support".
