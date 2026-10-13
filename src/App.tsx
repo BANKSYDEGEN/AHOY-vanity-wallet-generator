@@ -6,6 +6,43 @@ import WalletWorker from './lib/worker.ts?worker&inline'
 
 const OFFLINE_BUILD = import.meta.env.MODE === 'offline'
 const OFFLINE_FILE = 'AHOY-vanity-wallet-generator-offline.html'
+// SHA-256 of the offline file, injected at build time by scripts/build.mjs (online build only).
+const OFFLINE_SHA256: string = import.meta.env.VITE_OFFLINE_SHA256 ?? ''
+
+function Checksum() {
+  if (OFFLINE_BUILD || !OFFLINE_SHA256) return null
+  const code = 'block whitespace-pre-wrap break-all rounded bg-ink/90 p-2 font-mono text-[11px] text-white select-all'
+  return (
+    <div className="mt-4 text-sm">
+      <p className={`${hand} text-2xl text-mahogany`}>🔏 Check the seal (SHA-256)</p>
+      <p className="mt-1 text-xs"><strong>Why:</strong> a matchin' fingerprint proves yer copy be the official one and wasn't tampered with.</p>
+      <code data-testid="offline-sha256" className={`${code} mt-1`}>{OFFLINE_SHA256}</code>
+      <p className="mt-2 text-xs">In the folder ye downloaded to, run:</p>
+      <p className="mt-1 text-xs font-semibold">Windows (PowerShell)</p>
+      <code className={code}>{`Get-FileHash .\\${OFFLINE_FILE} -Algorithm SHA256`}</code>
+      <p className="mt-1 text-xs font-semibold">Mac / Linux (Terminal)</p>
+      <code className={code}>{`shasum -a 256 ${OFFLINE_FILE}`}</code>
+      <p className="mt-1 text-xs">The result must match the code above exactly (Windows shows it in capitals; that's fine). Also published as <a className="underline" href={`${import.meta.env.BASE_URL}${OFFLINE_FILE}.sha256`}>{OFFLINE_FILE}.sha256</a>.</p>
+    </div>
+  )
+}
+
+const FUND_TEST = [
+  'Send a tiny amount to the new address first.',
+  'Restore the wallet from yer written phrase in Phantom or another wallet, ideally on a separate device, or later after clearin\' this page.',
+  'Check the same address appears.',
+  'Only then send real funds.',
+]
+
+function FundTest() {
+  return (
+    <div className="rounded border-4 border-double border-mahogany bg-mahogany/10 p-4">
+      <p className={`${hand} text-3xl text-mahogany`}>🪙 Test before ye fund</p>
+      <ol className="mt-2 list-decimal space-y-1 pl-5 text-sm">{FUND_TEST.map((s) => <li key={s}>{s}</li>)}</ol>
+      <p className="mt-2 text-xs"><strong>Why:</strong> it proves yer paper backup be correct before any real treasure depends on it.</p>
+    </div>
+  )
+}
 
 const THREADS = Math.max(1, navigator.hardwareConcurrency || 4)
 
@@ -241,6 +278,7 @@ export default function App() {
               <li><strong>Generate</strong> yer wallet, write the seed phrase on paper, then close the page before reconnectin'.</li>
             </ol>
             {!OFFLINE_BUILD && <a href={`${import.meta.env.BASE_URL}${OFFLINE_FILE}`} download={OFFLINE_FILE} className={`red-btn ${hand} mt-4 block w-full py-4 text-center text-4xl text-white drop-shadow-[0_5px_5px_#0000005b] hover:brightness-110`}>⬇ Download offline version</a>}
+            <Checksum />
           </div>
         </div>
 
@@ -309,6 +347,7 @@ export default function App() {
               <Secret label={result.chain === 'solana' ? 'Private key (base58)' : 'Private key (hex)'} value={result.privateKey} />
               {result.secretKeyJson && <Secret label="Secret key JSON byte array" value={result.secretKeyJson} />}
               <p className="mt-4 text-sm font-semibold text-blood">✍ Write it on paper. Copyin' be disabled for secrets on purpose, and they hide again after 60 seconds or when ye leave this tab.</p>
+              <div className="mt-4"><FundTest /></div>
               <button onClick={() => { setResult(null); setAttempts(0); setRate(0); total.current = 0 }} className={`${hand} mt-4 w-full bg-ink py-2 text-3xl text-white hover:brightness-125`}>☠ Clear wallet from memory</button>
             </section>
           )}

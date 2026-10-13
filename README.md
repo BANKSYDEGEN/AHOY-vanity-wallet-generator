@@ -70,6 +70,29 @@ With no internet, nothing on the computer can send your keys anywhere while you 
 
 `npm run build` builds this file with `vite-plugin-singlefile` (`vite build --mode offline`), and the deploy publishes it next to the site.
 
+
+### Check the seal (SHA-256)
+The build publishes the offline file's fingerprint next to it: [AHOY-vanity-wallet-generator-offline.html.sha256](https://banksydegen.github.io/AHOY-vanity-wallet-generator/AHOY-vanity-wallet-generator-offline.html.sha256). The site shows the same hash under the Download button. *Why:* if your file's hash matches, your copy is the official one and wasn't tampered with.
+
+In the folder you downloaded to, run:
+```powershell
+# Windows (PowerShell)
+Get-FileHash .\AHOY-vanity-wallet-generator-offline.html -Algorithm SHA256
+```
+```bash
+# Mac / Linux
+shasum -a 256 AHOY-vanity-wallet-generator-offline.html
+```
+The output must match the published hash exactly (PowerShell prints it in capitals, which is fine). The offline file can't show its own hash, so check it against the website or the `.sha256` file. `scripts/build.mjs` builds the offline file first, hashes it, then builds the site with that hash baked in (the CSP blocks fetching it at runtime), and publishes the file byte-for-byte.
+
+## 🪙 Test before you fund
+1. Send a tiny amount to the new address first.
+2. Restore the wallet from your written phrase in Phantom or another wallet, ideally on a separate device, or later after clearing the page.
+3. Confirm the same address appears.
+4. Only then send real funds.
+
+*Why:* it proves your paper backup is correct before money depends on it. The app shows these steps on the result screen.
+
 ## Develop
 ```bash
 npm install
