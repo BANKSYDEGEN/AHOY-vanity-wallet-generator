@@ -61,6 +61,48 @@ function Words({ mnemonic }: { mnemonic: string }) {
   )
 }
 
+const SAFETY_RULES: [string, string][] = [
+  ['Cut the anchor line first.', 'Before forgin\' a wallet for real funds, turn off Wi-Fi or unplug the cable. Runnin\' the downloaded offline copy is safest.'],
+  ['Ink it on paper.', 'Write the 24 words down by hand. Never screenshot or photograph them, never copy them to the clipboard, and never save them to the cloud, a notes app or a password manager that syncs online.'],
+  ['Close the hatch before sailin\' on.', 'Close this tab or app before ye go back online.'],
+  ['Clean ship, no stowaways.', 'Use a clean device and turn off browser extensions (or open a fresh browser profile).'],
+  ['The words ARE the treasure.', 'Anyone with yer seed phrase owns the wallet. Never share it with any soul, not even "support".'],
+  ['Big hoard? Use a vault.', 'For large amounts, prefer a hardware wallet. This tool has not been audited by a third party.'],
+]
+
+function useOnline() {
+  const [online, setOnline] = useState(() => navigator.onLine)
+  useEffect(() => {
+    const up = () => setOnline(true), down = () => setOnline(false)
+    window.addEventListener('online', up); window.addEventListener('offline', down)
+    return () => { window.removeEventListener('online', up); window.removeEventListener('offline', down) }
+  }, [])
+  return online
+}
+
+function OnlineBadge() {
+  const online = useOnline()
+  return (
+    <p role="status" aria-live="polite" className={`flex items-center gap-2 rounded px-3 py-2 text-sm font-semibold text-white ${online ? 'bg-blood' : 'bg-green-700'}`}>
+      <span aria-hidden className={`inline-block h-3 w-3 rounded-full ${online ? 'animate-pulse bg-yellow-300' : 'bg-green-300'}`} />
+      {online ? 'You are ONLINE. Disconnect before generating a wallet for real funds.' : 'You are offline. Good, matey: safe to forge.'}
+    </p>
+  )
+}
+
+function SafetyChecklist({ title }: { title: string }) {
+  return (
+    <div data-testid="safety-checklist" className="rounded border-4 border-double border-blood bg-blood/10 p-4">
+      <p className={`${hand} text-3xl text-blood`}>{title}</p>
+      <ul className="mt-2 space-y-1.5 text-sm">
+        {SAFETY_RULES.map(([head, body]) => (
+          <li key={head} className="flex gap-2"><span aria-hidden className="text-blood">☐</span><span><strong>{head}</strong> {body}</span></li>
+        ))}
+      </ul>
+    </div>
+  )
+}
+
 export default function App() {
   const [chain, setChain] = useState<Chain>('solana')
   const [prefix, setPrefix] = useState('')
@@ -123,7 +165,7 @@ export default function App() {
               <li><strong>Download</strong> the offline file with the big red button below. It's one file, nothing to install.</li>
               <li><strong>Disconnect</strong> from the internet (turn off Wi-Fi or unplug the cable).</li>
               <li><strong>Double-click</strong> the downloaded file. It opens in yer web browser.</li>
-              <li><strong>Generate</strong> yer wallet, write down the seed phrase, then close the page before reconnectin'.</li>
+              <li><strong>Generate</strong> yer wallet, write the seed phrase on paper, then close the page before reconnectin'.</li>
             </ol>
             {!OFFLINE_BUILD && <a href={`${import.meta.env.BASE_URL}${OFFLINE_FILE}`} download={OFFLINE_FILE} className={`red-btn ${hand} mt-4 block w-full py-4 text-center text-4xl text-white drop-shadow-[0_5px_5px_#0000005b] hover:brightness-110`}>⬇ Download offline version</a>}
           </div>
@@ -156,7 +198,9 @@ export default function App() {
             </div>
             <p className="mt-3 text-xs text-mahogany">Each attempt runs BIP39 seed derivation (PBKDF2, 2048 rounds), far slower than raw key generation. Every extra character makes the hunt about {chain === 'solana' ? '58×' : '16×'} longer, so prefixes over 4–5 characters can take hours or days. Crew of {THREADS} worker threads.</p>
 
-            <div className="mt-5">
+            <div className="mt-5 space-y-3">
+              <OnlineBadge />
+              <SafetyChecklist title="☠ Pirate's Code: read before ye hunt" />
               {running
                 ? <button onClick={stop} className={`${hand} w-full bg-mahogany py-2 text-4xl text-white hover:brightness-125`}>Drop anchor (Stop)</button>
                 : <button onClick={start} disabled={!!error || (!prefix && !suffix)} className={`red-btn ${hand} w-full py-4 text-4xl text-white drop-shadow-[0_5px_5px_#0000005b] hover:brightness-110 disabled:opacity-50`}>Hunt for Treasure</button>}
@@ -169,6 +213,10 @@ export default function App() {
               <p className={`${hand} mt-3 text-3xl text-mahogany`}>Address</p>
               <p className="break-all font-mono text-lg font-semibold">{result.address}</p>
               <p className="mt-1 text-xs text-mahogany">Derivation path {result.path} ({result.chain === 'solana' ? 'Phantom' : 'MetaMask'} default)</p>
+              <div className="mt-4 space-y-3">
+                <OnlineBadge />
+                <SafetyChecklist title="⚠ Before ye press Reveal" />
+              </div>
               <Words mnemonic={result.mnemonic} />
               <Secret label={result.chain === 'solana' ? 'Private key (base58)' : 'Private key (hex)'} value={result.privateKey} />
               {result.secretKeyJson && <Secret label="Secret key JSON byte array" value={result.secretKeyJson} />}

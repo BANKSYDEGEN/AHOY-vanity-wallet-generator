@@ -25,6 +25,18 @@ When it finds a match you can export:
 
 Seed derivation (PBKDF2) is slow: about 100 attempts/s per core. Each extra character multiplies the search time by about 58 for Solana or 16 for EVM.
 
+## ☠ The Pirate's Code: stay safe with real treasure
+Read this before ye generate a wallet that will hold real funds.
+
+1. **Cut the anchor line first.** Turn off Wi-Fi or unplug the cable *before* you generate a wallet for real funds. Running the downloaded offline copy (see below) is the safest way.
+2. **Ink it on paper.** Write the 24 words down by hand. **Never** screenshot or photograph them, copy them to the clipboard, or save them to the cloud, a notes app, or a password manager that syncs online.
+3. **Close the hatch before sailing on.** Close the tab or app *before* you reconnect to the internet.
+4. **Clean ship, no stowaways.** Use a clean device and disable browser extensions (or use a fresh browser profile).
+5. **The words ARE the treasure.** Anyone with your seed phrase owns the wallet. Never share it with anyone, including "support".
+6. **Big hoard? Use a vault.** For large amounts, prefer a hardware wallet. This tool has **not** been audited by a third party (the crypto libraries it uses are audited; this app is not).
+
+The app shows this checklist next to the **Hunt for Treasure** button and again on the result screen before you reveal anything, along with a live online/offline indicator (red while you're online, green once you're offline).
+
 ## Security
 - 100% client-side. There is no backend and no analytics. A Content-Security-Policy sets `connect-src 'none'`, so the page cannot make network requests.
 - It uses only audited libraries from the [noble/scure](https://paulmillr.com/noble/) family. There is no custom cryptography.
@@ -36,7 +48,7 @@ A computer with no internet can't leak your keys to anyone, even by accident.
 1. **Download** the offline version: [AHOY-vanity-wallet-generator-offline.html](https://banksydegen.github.io/AHOY-vanity-wallet-generator/AHOY-vanity-wallet-generator-offline.html) (or use the big **Download offline version** button on the site). It's a single file with nothing to install.
 2. **Disconnect** from the internet (turn off Wi-Fi or unplug the cable).
 3. **Double-click** the downloaded file. It opens in your web browser.
-4. **Generate** your wallet, write down the seed phrase, then close the page before you reconnect.
+4. **Generate** your wallet, write the seed phrase down on paper, then close the page before you reconnect.
 
 `npm run build` builds this file with `vite-plugin-singlefile` (`vite build --mode offline`), and the deploy publishes it next to the site.
 
