@@ -257,11 +257,11 @@ export default function App() {
       <div className="mx-auto mt-10 grid max-w-6xl items-start gap-10 lg:grid-cols-[minmax(0,2fr)_minmax(0,3fr)]">
         <div className="flex flex-col items-center gap-6">
           <img src={logo} alt="PumpFun Pirates captain" className="sway w-full max-w-sm rounded-b-full border-t-[20px] border-b-8 border-t-ink border-b-blood drop-shadow-[0_10px_10px_#00000040]" />
-          <div className="paper w-full max-w-sm p-5">
+          <div className="paper w-full max-w-sm px-5 pt-8 pb-10">
             <p className={`${hand} text-3xl text-blood`}>⚠ Guard yer treasure, matey</p>
             <p className="mt-1 text-sm">Keys be forged right here in yer browser and never leave this page: no backend, no analytics, no storage, and the page's security policy (<code>connect-src 'none'</code>) blocks it from sendin' anything out. The real danger be in the handlin', not the maths: anyone who sees yer seed phrase owns the wallet.</p>
           </div>
-          <div className="paper w-full max-w-sm p-5">
+          <div className="paper w-full max-w-sm px-5 pt-8 pb-10">
             <p className={`${hand} text-3xl text-blood`}>🗝 Where yer wallet comes from</p>
             <ul className="mt-1 list-disc space-y-1 pl-5 text-sm">
               <li><strong>Brand-new, not from a list.</strong> Each wallet starts from 128 bits (12 words) or 256 bits (24 words) of fresh randomness from yer browser's secure generator (<code>crypto.getRandomValues</code>).</li>
@@ -269,7 +269,7 @@ export default function App() {
               <li><strong>Nothing be kept.</strong> It isn't saved or sent anywhere, so no one can look it up later. Lose the seed phrase and the funds be gone forever.</li>
             </ul>
           </div>
-          <div className="paper w-full max-w-sm p-5">
+          <div className="paper w-full max-w-sm px-5 pt-8 pb-10">
             <p className={`${hand} text-3xl text-blood`}>{OFFLINE_BUILD ? '⚓ Ye be sailin\' offline' : '⚓ Safest way to use it: offline'}</p>
             <p className="mt-1 text-sm"><strong>Why offline?</strong> With no internet, nothing on the computer can send yer keys anywhere while ye work.</p>
             <ol className="mt-2 list-decimal space-y-1 pl-5 text-sm">
@@ -284,7 +284,7 @@ export default function App() {
         </div>
 
         <div className="flex flex-col gap-8">
-          <section className="paper px-6 py-6 sm:px-10">
+          <section className="paper px-6 pt-12 pb-16 sm:px-10">
             <p className={`${hand} text-3xl`}>Chart a custom address on the Solana Seas (or EVM waters). Every attempt forges a fresh 12- or 24-word seed phrase, ready for Phantom or MetaMask.</p>
             <div className="mt-4 flex gap-3">
               {(['solana', 'evm'] as Chain[]).map((c) => (
@@ -333,7 +333,7 @@ export default function App() {
           </section>
 
           {result && (
-            <section id="result" className="paper px-6 py-6 sm:px-10">
+            <section id="result" className="paper px-6 pt-12 pb-16 sm:px-10">
               <h2 className={`${hand} text-5xl text-blood`}>☠ Treasure found after {attempts.toLocaleString()} attempts!</h2>
               <div className="mt-3 flex items-center justify-between"><p className={`${hand} text-3xl text-mahogany`}>Address (public, safe to share)</p><AddressCopy address={result.address} /></div>
               <AddressQr address={result.address} />
@@ -357,7 +357,7 @@ export default function App() {
       <footer className={`wood mx-auto mt-12 w-full max-w-xl px-10 py-3 text-center ${hand} text-2xl text-white`}>
         PumpFun Pirates · built with audited noble/scure crypto · <a className="underline" href="https://github.com/BANKSYDEGEN/AHOY-vanity-wallet-generator">Source</a>
       </footer>
-      <p data-testid="disclaimer" className="paper mx-auto mt-4 max-w-3xl p-4 text-xs">Disclaimer: This is an experimental, educational tool. It is not intended for real funds or meaningful amounts. Use it at your own risk. It is provided "as is", without warranty of any kind, express or implied. The author and maintainers (BANKSYDEGEN) accept no liability for any loss of funds, damages, or legal consequences arising from its use. Nothing here is financial, legal, or security advice. You are responsible for complying with the laws that apply to you.</p>
+      <p data-testid="disclaimer" className="paper mx-auto mt-4 max-w-3xl px-6 pt-8 pb-10 text-xs">Disclaimer: This is an experimental, educational tool. It is not intended for real funds or meaningful amounts. Use it at your own risk. It is provided "as is", without warranty of any kind, express or implied. The author and maintainers (BANKSYDEGEN) accept no liability for any loss of funds, damages, or legal consequences arising from its use. Nothing here is financial, legal, or security advice. You are responsible for complying with the laws that apply to you.</p>
     </div>
   )
 }
