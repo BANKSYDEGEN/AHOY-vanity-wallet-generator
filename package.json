@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
+    "build": "tsc -b && vite build && vite build --mode offline && cp dist-offline/index.html dist/AHOY-vanity-wallet-generator-offline.html",
     "lint": "oxlint",
     "preview": "vite preview",
     "test": "vitest run"
@@ -32,6 +32,7 @@
     "tailwindcss": "^4.3.3",
     "typescript": "~6.0.2",
     "vite": "^8.3.0",
+    "vite-plugin-singlefile": "^2.3.3",
     "vitest": "^5.0.4"
   }
 }

@@ -1,6 +1,10 @@
 import { useEffect, useRef, useState } from 'react'
 import { expectedAttempts, validatePattern, type Chain, type Wallet } from './lib/wallet'
 import logo from './assets/logo.webp'
+import WalletWorker from './lib/worker.ts?worker&inline'
+
+const OFFLINE_BUILD = import.meta.env.MODE === 'offline'
+const OFFLINE_FILE = 'AHOY-vanity-wallet-generator-offline.html'
 
 const THREADS = Math.max(1, navigator.hardwareConcurrency || 4)
 
@@ -88,7 +92,7 @@ export default function App() {
     total.current = 0; started.current = performance.now()
     setRunning(true)
     for (let i = 0; i < THREADS; i++) {
-      const w = new Worker(new URL('./lib/worker.ts', import.meta.url), { type: 'module' })
+      const w = new WalletWorker()
       w.onmessage = (e) => {
         total.current += e.data.count
         setAttempts(total.current)
@@ -110,7 +114,18 @@ export default function App() {
           <img src={logo} alt="PumpFun Pirates captain" className="sway w-full max-w-sm rounded-b-full border-t-[20px] border-b-8 border-t-ink border-b-blood drop-shadow-[0_10px_10px_#00000040]" />
           <div className="paper w-full max-w-sm p-5">
             <p className={`${hand} text-3xl text-blood`}>⚠ Guard yer treasure, matey</p>
-            <p className="mt-1 text-sm">Keys be forged right here in yer browser and never leave this page: no backend, no analytics, no network calls. For <strong>real booty</strong>, download this site and run it <strong>offline</strong>. Never share yer seed phrase or private key with any soul, and stow it somewhere safe.</p>
+            <p className="mt-1 text-sm">Keys be forged right here in yer browser and never leave this page: no backend, no analytics, no network calls. Never share yer seed phrase or private key with any soul, and stow it somewhere safe.</p>
+          </div>
+          <div className="paper w-full max-w-sm p-5">
+            <p className={`${hand} text-3xl text-blood`}>{OFFLINE_BUILD ? '⚓ Ye be sailin\' offline' : '⚓ For real booty, go offline'}</p>
+            <p className="mt-1 text-sm"><strong>Why offline?</strong> A computer with no internet can't leak yer keys to anyone, even by accident.</p>
+            <ol className="mt-2 list-decimal space-y-1 pl-5 text-sm">
+              <li><strong>Download</strong> the offline file with the big red button below. It's one file, nothing to install.</li>
+              <li><strong>Disconnect</strong> from the internet (turn off Wi-Fi or unplug the cable).</li>
+              <li><strong>Double-click</strong> the downloaded file. It opens in yer web browser.</li>
+              <li><strong>Generate</strong> yer wallet, write down the seed phrase, then close the page before reconnectin'.</li>
+            </ol>
+            {!OFFLINE_BUILD && <a href={`${import.meta.env.BASE_URL}${OFFLINE_FILE}`} download={OFFLINE_FILE} className={`red-btn ${hand} mt-4 block w-full py-4 text-center text-4xl text-white drop-shadow-[0_5px_5px_#0000005b] hover:brightness-110`}>⬇ Download offline version</a>}
           </div>
         </div>
 

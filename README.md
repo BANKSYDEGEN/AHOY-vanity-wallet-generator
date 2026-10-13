@@ -28,7 +28,17 @@ Seed derivation (PBKDF2) is slow: about 100 attempts/s per core. Each extra char
 ## Security
 - 100% client-side. There is no backend and no analytics. A Content-Security-Policy sets `connect-src 'none'`, so the page cannot make network requests.
 - It uses only audited libraries from the [noble/scure](https://paulmillr.com/noble/) family. There is no custom cryptography.
-- **For real funds:** clone the repo, run `npm run build`, and open `dist/` on an **offline** machine. Never share your seed phrase or private key.
+- Never share your seed phrase or private key.
+
+## Run it offline (recommended for real funds)
+A computer with no internet can't leak your keys to anyone, even by accident.
+
+1. **Download** the offline version: [AHOY-vanity-wallet-generator-offline.html](https://banksydegen.github.io/AHOY-vanity-wallet-generator/AHOY-vanity-wallet-generator-offline.html) (or use the big **Download offline version** button on the site). It's a single file with nothing to install.
+2. **Disconnect** from the internet (turn off Wi-Fi or unplug the cable).
+3. **Double-click** the downloaded file. It opens in your web browser.
+4. **Generate** your wallet, write down the seed phrase, then close the page before you reconnect.
+
+`npm run build` builds this file with `vite-plugin-singlefile` (`vite build --mode offline`), and the deploy publishes it next to the site.
 
 ## Develop
 ```bash
