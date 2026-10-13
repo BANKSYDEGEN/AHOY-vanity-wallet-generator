@@ -1,4 +1,4 @@
-# Pirate Vanity Wallets ☠
+# $AHOY Vanity Wallet Generator ☠
 
 A [PumpFun Pirates](https://pumpfunpirates.com) themed edition of [vanity-wallet](https://github.com/BANKSYDEGEN/vanity-wallet). It uses the same crypto and worker code, restyled with the Pirates art. Images come from pumpfunpirates.com (logo, map background, wood, paper and red button), and the fonts (Just Another Hand, Poppins) come from @fontsource. Everything is bundled locally, so the page makes no remote requests.
 
@@ -6,7 +6,7 @@ A [PumpFun Pirates](https://pumpfunpirates.com) themed edition of [vanity-wallet
 
 Generate **Solana** or **EVM** wallets whose address starts or ends with characters you choose. Every wallet comes with a **24-word BIP39 seed phrase**, so you can import it into Phantom or MetaMask.
 
-**Live:** https://banksydegen.github.io/pirate-vanity-wallet/
+**Live:** https://banksydegen.github.io/AHOY-vanity-wallet-generator/
 
 ## How it works
 Each attempt does the following:

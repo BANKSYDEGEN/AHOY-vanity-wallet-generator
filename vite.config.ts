@@ -4,7 +4,7 @@ import { defineConfig } from 'vite'
 
 export default defineConfig({
   plugins: [react(), tailwindcss()],
-  base: process.env.VITE_BASE ?? '/pirate-vanity-wallet/',
+  base: process.env.VITE_BASE ?? '/AHOY-vanity-wallet-generator/',
   worker: { format: 'es' },
   test: { environment: 'node' },
 } as never)

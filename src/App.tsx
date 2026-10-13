@@ -103,7 +103,7 @@ export default function App() {
   const input = 'w-full border-b-2 border-mahogany bg-transparent px-1 py-1 font-mono text-lg text-ink outline-none placeholder:text-mahogany/40 focus:border-blood'
   return (
     <div className="min-h-screen px-3 py-10">
-      <h1 className={`wood mx-auto w-full max-w-4xl px-16 py-5 text-center ${hand} select-none text-5xl text-white sm:text-7xl`}>PIRATE VANITY WALLETS</h1>
+      <h1 className={`wood mx-auto w-full max-w-4xl px-16 py-5 text-center ${hand} select-none text-5xl text-white sm:text-7xl`}>$AHOY VANITY WALLET GENERATOR</h1>
 
       <div className="mx-auto mt-10 grid max-w-6xl items-start gap-10 lg:grid-cols-[minmax(0,2fr)_minmax(0,3fr)]">
         <div className="flex flex-col items-center gap-6">
@@ -162,7 +162,7 @@ export default function App() {
         </div>
       </div>
       <footer className={`wood mx-auto mt-12 w-full max-w-xl px-10 py-3 text-center ${hand} text-2xl text-white`}>
-        PumpFun Pirates · built with audited noble/scure crypto · <a className="underline" href="https://github.com/BANKSYDEGEN/pirate-vanity-wallet">Source</a>
+        PumpFun Pirates · built with audited noble/scure crypto · <a className="underline" href="https://github.com/BANKSYDEGEN/AHOY-vanity-wallet-generator">Source</a>
       </footer>
     </div>
   )
