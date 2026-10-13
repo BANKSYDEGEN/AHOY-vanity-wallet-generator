@@ -31,7 +31,7 @@ const FUND_TEST = [
   'Send a tiny amount to the new address first.',
   'Restore the wallet from yer written phrase in Phantom or another wallet, ideally on a separate device, or later after clearin\' this page.',
   'Check the same address appears.',
-  'Only then send real funds.',
+  'Only then send more.',
 ]
 
 function FundTest() {
@@ -39,7 +39,7 @@ function FundTest() {
     <div className="rounded border-4 border-double border-mahogany bg-mahogany/10 p-4">
       <p className={`${hand} text-3xl text-mahogany`}>🪙 Test before ye fund</p>
       <ol className="mt-2 list-decimal space-y-1 pl-5 text-sm">{FUND_TEST.map((s) => <li key={s}>{s}</li>)}</ol>
-      <p className="mt-2 text-xs"><strong>Why:</strong> it proves yer paper backup be correct before any real treasure depends on it.</p>
+      <p className="mt-2 text-xs"><strong>Why:</strong> it proves yer paper backup be correct before any treasure depends on it.</p>
     </div>
   )
 }
@@ -161,14 +161,14 @@ function AddressCopy({ address }: { address: string }) {
 }
 
 const SAFETY_RULES: [string, string][] = [
-  ['Cut the anchor line first.', 'Before forgin\' a wallet for real funds, turn off Wi-Fi or unplug the cable, and use the downloaded offline copy. Why: with no connection, nothing on the computer can send yer seed anywhere while it be on screen.'],
+  ['Cut the anchor line first.', 'Before forgin\' a wallet, turn off Wi-Fi or unplug the cable, and use the downloaded offline copy. Why: with no connection, nothing on the computer can send yer seed anywhere while it be on screen.'],
   ['Ink it on paper.', 'Write the seed words on paper, by hand. Never screenshot or photograph them, never copy them to the clipboard, and never save them to the cloud, a notes app or a password manager that syncs online. Why: photos, clipboards and notes get synced and backed up, and other apps can read them. Paper can\'t be hacked.'],
   ['Never type it into a website.', 'Only type yer seed into the wallet app ye be importin\' it into. Why: any site or "support" agent askin\' for it be a thief.'],
   ['Close the hatch before sailin\' on.', 'Close this tab or app before ye go back online. Why: the wallet only lives in this page\'s memory, so closin\' it wipes it before any connection returns.'],
   ['Clean ship, no stowaways.', 'Use a clean device and turn off browser extensions (or open a fresh browser profile). Why: malware and extensions can read the screen and page; goin\' offline doesn\'t stop them seein\' it.'],
   ['Only from the official port.', 'Get this tool only from banksydegen.github.io/AHOY-vanity-wallet-generator. Why: a tampered copy could look identical but quietly use weak randomness or save yer seed.'],
   ['The words ARE the treasure.', 'Anyone with yer seed phrase owns the wallet. Never share it with any soul, not even "support". Lose it and the treasure be gone forever: nobody, us included, can recover it.'],
-  ['Big hoard? Use a vault.', 'For large amounts, prefer a hardware wallet. This tool has not been audited by a third party.'],
+  ['Big hoard? Use a vault.', 'This be an experimental tool, not for meaningful amounts. For real holdings, use a hardware wallet. This tool has not been audited by a third party.'],
 ]
 
 function useOnline() {
@@ -186,7 +186,7 @@ function OnlineBadge() {
   return (
     <p role="status" aria-live="polite" className={`flex items-center gap-2 rounded px-3 py-2 text-sm font-semibold text-white ${online ? 'bg-blood' : 'bg-green-700'}`}>
       <span aria-hidden className={`inline-block h-3 w-3 rounded-full ${online ? 'animate-pulse bg-yellow-300' : 'bg-green-300'}`} />
-      {online ? 'You are ONLINE. Disconnect before generating a wallet for real funds.' : 'You are offline. Good, matey: safe to forge.'}
+      {online ? 'You are ONLINE. Disconnect before generating a wallet.' : 'You are offline. Good, matey: safe to forge.'}
     </p>
   )
 }
@@ -252,6 +252,7 @@ export default function App() {
   return (
     <div className="min-h-screen px-3 py-10">
       <h1 className={`wood mx-auto w-full max-w-4xl px-16 py-5 text-center ${hand} select-none text-5xl text-white sm:text-7xl`}>$AHOY VANITY WALLET GENERATOR</h1>
+      <p data-testid="disclaimer-short" className="mx-auto mt-4 max-w-2xl rounded bg-ink/80 px-4 py-2 text-center text-sm text-white">⚠ <strong>Experimental, educational tool. Not for real funds or meaningful amounts.</strong> Sail at yer own risk: provided as is, no warranty, no liability for lost treasure. Full disclaimer at the bottom.</p>
 
       <div className="mx-auto mt-10 grid max-w-6xl items-start gap-10 lg:grid-cols-[minmax(0,2fr)_minmax(0,3fr)]">
         <div className="flex flex-col items-center gap-6">
@@ -269,7 +270,7 @@ export default function App() {
             </ul>
           </div>
           <div className="paper w-full max-w-sm p-5">
-            <p className={`${hand} text-3xl text-blood`}>{OFFLINE_BUILD ? '⚓ Ye be sailin\' offline' : '⚓ For real booty, go offline'}</p>
+            <p className={`${hand} text-3xl text-blood`}>{OFFLINE_BUILD ? '⚓ Ye be sailin\' offline' : '⚓ Safest way to use it: offline'}</p>
             <p className="mt-1 text-sm"><strong>Why offline?</strong> With no internet, nothing on the computer can send yer keys anywhere while ye work.</p>
             <ol className="mt-2 list-decimal space-y-1 pl-5 text-sm">
               <li><strong>Download</strong> the offline file with the big red button below. It's one file, nothing to install.</li>
@@ -356,6 +357,7 @@ export default function App() {
       <footer className={`wood mx-auto mt-12 w-full max-w-xl px-10 py-3 text-center ${hand} text-2xl text-white`}>
         PumpFun Pirates · built with audited noble/scure crypto · <a className="underline" href="https://github.com/BANKSYDEGEN/AHOY-vanity-wallet-generator">Source</a>
       </footer>
+      <p data-testid="disclaimer" className="paper mx-auto mt-4 max-w-3xl p-4 text-xs">Disclaimer: This is an experimental, educational tool. It is not intended for real funds or meaningful amounts. Use it at your own risk. It is provided "as is", without warranty of any kind, express or implied. The author and maintainers (BANKSYDEGEN) accept no liability for any loss of funds, damages, or legal consequences arising from its use. Nothing here is financial, legal, or security advice. You are responsible for complying with the laws that apply to you.</p>
     </div>
   )
 }
