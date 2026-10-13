@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { expectedAttempts, validatePattern, type Chain, type Wallet } from './lib/wallet'
+import { expectedAttempts, validatePattern, type Chain, type Wallet, type WordCount } from './lib/wallet'
 import logo from './assets/logo.webp'
 import WalletWorker from './lib/worker.ts?worker&inline'
 
@@ -53,7 +53,7 @@ function Words({ mnemonic }: { mnemonic: string }) {
   const [copied, copy] = useCopy()
   return (
     <div className="mt-4">
-      <Header label="24-word seed phrase (BIP39)" show={show} setShow={setShow} copied={copied} copy={() => copy(mnemonic)} />
+      <Header label={`${mnemonic.split(' ').length}-word seed phrase (BIP39)`} show={show} setShow={setShow} copied={copied} copy={() => copy(mnemonic)} />
       <ol className={`grid grid-cols-3 gap-2 rounded border-2 border-mahogany/40 bg-sand/30 p-3 font-mono text-sm sm:grid-cols-4 ${show ? '' : 'select-none blur-sm'}`}>
         {mnemonic.split(' ').map((w, i) => <li key={i} className="rounded bg-white/40 px-2 py-1"><span className="mr-1 text-mahogany/60">{i + 1}.</span><span className="font-semibold">{w}</span></li>)}
       </ol>
@@ -108,6 +108,7 @@ export default function App() {
   const [prefix, setPrefix] = useState('')
   const [suffix, setSuffix] = useState('')
   const [caseSensitive, setCaseSensitive] = useState(false)
+  const [words, setWords] = useState<WordCount>(24)
   const [running, setRunning] = useState(false)
   const [attempts, setAttempts] = useState(0)
   const [rate, setRate] = useState(0)
@@ -141,7 +142,7 @@ export default function App() {
         setRate(total.current / ((performance.now() - started.current) / 1000))
         if (e.data.type === 'found') { setResult(e.data.wallet); stop() }
       }
-      w.postMessage({ cmd: 'start', chain, pattern })
+      w.postMessage({ cmd: 'start', chain, pattern, words })
       workers.current.push(w)
     }
   }
@@ -173,7 +174,7 @@ export default function App() {
 
         <div className="flex flex-col gap-8">
           <section className="paper px-6 py-6 sm:px-10">
-            <p className={`${hand} text-3xl`}>Chart a custom address on the Solana Seas (or EVM waters). Every attempt forges a fresh 24-word seed phrase, ready for Phantom or MetaMask.</p>
+            <p className={`${hand} text-3xl`}>Chart a custom address on the Solana Seas (or EVM waters). Every attempt forges a fresh 12- or 24-word seed phrase, ready for Phantom or MetaMask.</p>
             <div className="mt-4 flex gap-3">
               {(['solana', 'evm'] as Chain[]).map((c) => (
                 <button key={c} disabled={running} onClick={() => setChain(c)} className={`${hand} px-5 py-1 text-3xl ${chain === c ? 'bg-blood text-white' : 'bg-mahogany/20 text-mahogany hover:bg-mahogany/30'}`}>{c === 'solana' ? 'Solana' : 'EVM (ETH, Base…)'}</button>
@@ -187,6 +188,19 @@ export default function App() {
               <input type="checkbox" checked={caseSensitive} disabled={running} onChange={(e) => setCaseSensitive(e.target.checked)} className="accent-blood" />
               Case-sensitive{chain === 'evm' && ' (match EIP-55 checksum casing)'}
             </label>
+            <div className="mt-4">
+              <p className={`${hand} text-2xl text-mahogany`}>Seed phrase length</p>
+              <div className="mt-1 flex gap-3">
+                {([12, 24] as WordCount[]).map((n) => (
+                  <button key={n} disabled={running} aria-pressed={words === n} onClick={() => setWords(n)} className={`${hand} px-5 py-1 text-3xl ${words === n ? 'bg-blood text-white' : 'bg-mahogany/20 text-mahogany hover:bg-mahogany/30'}`}>{n} words</button>
+                ))}
+              </div>
+              <ul className="mt-2 list-disc space-y-0.5 pl-5 text-xs text-mahogany">
+                <li><strong>12 words</strong> (128-bit): already impossible to brute-force, and easier to write down with less chance of a typo.</li>
+                <li><strong>24 words</strong> (256-bit): extra margin for long-term or large hoards, and the usual default on hardware wallets, but twice as much to write down.</li>
+                <li>Either be safe as long as it stays offline and private. Phantom and most wallets accept both; a few only import one length. Search speed is the same either way.</li>
+              </ul>
+            </div>
             <p className="mt-1 text-xs text-mahogany">{chain === 'solana' ? 'Base58: 1-9, A-Z, a-z excluding 0, O, I and l.' : 'Hex only: 0-9, a-f.'}</p>
             {error && <p className="mt-2 text-sm font-semibold text-blood">{error}</p>}
 

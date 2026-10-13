@@ -4,13 +4,19 @@ A [PumpFun Pirates](https://pumpfunpirates.com) themed edition of [vanity-wallet
 
 ## Vanity Wallet Generator
 
-Generate **Solana** or **EVM** wallets whose address starts or ends with characters you choose. Every wallet comes with a **24-word BIP39 seed phrase**, so you can import it into Phantom or MetaMask.
+Generate **Solana** or **EVM** wallets whose address starts or ends with characters you choose. Every wallet comes with a **12- or 24-word BIP39 seed phrase** (your choice; 24 is the default), so you can import it into Phantom or MetaMask.
 
 **Live:** https://banksydegen.github.io/AHOY-vanity-wallet-generator/
 
+## 12 or 24 words?
+- **12 words (128-bit):** already effectively impossible to brute-force, and easier to write down and back up with less chance of a typo.
+- **24 words (256-bit, default):** extra margin for long-term or large holdings and the usual default on hardware wallets, but twice as much to write down.
+- Either is safe as long as it stays offline and private. Phantom and most wallets import both; a few only accept one length.
+- Search speed is the same: each attempt's cost is dominated by PBKDF2 seed derivation, which doesn't depend on phrase length.
+
 ## How it works
 Each attempt does the following:
-1. Generates 256 bits of entropy and turns it into a 24-word mnemonic (`@scure/bip39`, English).
+1. Generates 128 bits (12 words) or 256 bits (24 words) of entropy and turns it into a mnemonic (`@scure/bip39`, English).
 2. Derives a seed with PBKDF2-HMAC-SHA512 (2048 rounds).
 3. Derives the address:
    - **Solana:** SLIP-0010 ed25519 at `m/44'/501'/0'/0'` (Phantom's default), via `micro-key-producer/slip10` and `@noble/curves`.
@@ -19,7 +25,7 @@ Each attempt does the following:
 The search runs in parallel, with one Web Worker per `navigator.hardwareConcurrency`. It supports a prefix and/or suffix, optional case sensitivity (EVM matches the EIP-55 checksum casing), and checks that you only typed valid characters (base58 excludes `0 O I l`; EVM is hex only).
 
 When it finds a match you can export:
-- the 24-word seed phrase,
+- the 12- or 24-word seed phrase,
 - the private key (Solana: base58 64-byte secret key and the JSON byte array; EVM: hex),
 - each one behind a reveal/copy toggle.
 

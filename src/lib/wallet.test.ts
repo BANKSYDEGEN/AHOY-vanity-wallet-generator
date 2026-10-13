@@ -4,6 +4,8 @@ import { secp256k1 } from '@noble/curves/secp256k1.js'
 import { keccak_256 } from '@noble/hashes/sha3.js'
 import { bytesToHex, hexToBytes } from '@noble/hashes/utils.js'
 import { base58 } from '@scure/base'
+import { validateMnemonic } from '@scure/bip39'
+import { wordlist } from '@scure/bip39/wordlists/english.js'
 import { evmChecksum, expectedAttempts, fromMnemonic, matches, randomWallet, validatePattern } from './wallet'
 
 const ABANDON = 'abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about'
@@ -38,6 +40,17 @@ describe('random wallets re-derive', () => {
       expect(fromMnemonic('evm', w.mnemonic).address).toBe(w.address)
       const pub = secp256k1.getPublicKey(hexToBytes(w.privateKey.slice(2)), false).slice(1)
       expect(evmChecksum(bytesToHex(keccak_256(pub).slice(-20)))).toBe(w.address)
+    })
+  }
+})
+
+describe('12 and 24 word lengths', () => {
+  for (const n of [12, 24] as const) for (const chain of ['solana', 'evm'] as const) {
+    it(`${chain} ${n} words`, () => {
+      const w = randomWallet(chain, n)
+      expect(w.mnemonic.split(' ')).toHaveLength(n)
+      expect(validateMnemonic(w.mnemonic, wordlist)).toBe(true)
+      expect(fromMnemonic(chain, w.mnemonic).address).toBe(w.address)
     })
   }
 })

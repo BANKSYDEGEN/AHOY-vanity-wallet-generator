@@ -10,6 +10,9 @@ import { bytesToHex } from '@noble/hashes/utils.js'
 import { base58 } from '@scure/base'
 
 export type Chain = 'solana' | 'evm'
+/** BIP39 phrase length: 12 words = 128-bit entropy, 24 words = 256-bit entropy. */
+export type WordCount = 12 | 24
+export const ENTROPY_BITS: Record<WordCount, 128 | 256> = { 12: 128, 24: 256 }
 export const SOL_PATH = "m/44'/501'/0'/0'" // Phantom default
 export const EVM_PATH = "m/44'/60'/0'/0/0" // MetaMask default
 
@@ -50,9 +53,9 @@ export function fromMnemonic(chain: Chain, mnemonic: string): Wallet {
   return { chain, mnemonic, path: EVM_PATH, address: evmChecksum(lower), privateKey: '0x' + bytesToHex(sk) }
 }
 
-/** One attempt: fresh 256-bit entropy → 24 words → derived address. */
-export function randomWallet(chain: Chain): Wallet {
-  return fromMnemonic(chain, generateMnemonic(wordlist, 256))
+/** One attempt: fresh entropy (128 or 256 bits) → 12 or 24 words → derived address. Defaults to 24. */
+export function randomWallet(chain: Chain, words: WordCount = 24): Wallet {
+  return fromMnemonic(chain, generateMnemonic(wordlist, ENTROPY_BITS[words]))
 }
 
 export const BASE58 = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz'

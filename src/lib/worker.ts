@@ -1,8 +1,8 @@
 /// <reference lib="webworker" />
-import { matches, randomWallet, type Chain, type Pattern } from './wallet'
+import { matches, randomWallet, type Chain, type Pattern, type WordCount } from './wallet'
 
 let running = false
-self.onmessage = (e: MessageEvent<{ cmd: 'start'; chain: Chain; pattern: Pattern } | { cmd: 'stop' }>) => {
+self.onmessage = (e: MessageEvent<{ cmd: 'start'; chain: Chain; pattern: Pattern; words: WordCount } | { cmd: 'stop' }>) => {
   const m = e.data
   if (m.cmd === 'stop') { running = false; return }
   running = true
@@ -11,7 +11,7 @@ self.onmessage = (e: MessageEvent<{ cmd: 'start'; chain: Chain; pattern: Pattern
     if (!running) return
     const end = performance.now() + 100
     while (performance.now() < end) {
-      const w = randomWallet(m.chain)
+      const w = randomWallet(m.chain, m.words)
       count++
       if (matches(m.chain, w.address, m.pattern)) {
         running = false
