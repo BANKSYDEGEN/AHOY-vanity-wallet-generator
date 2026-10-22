@@ -251,6 +251,9 @@ export default function App() {
   const input = 'w-full border-b-2 border-mahogany bg-transparent px-1 py-1 font-mono text-lg text-ink outline-none placeholder:text-mahogany/40 focus:border-blood'
   return (
     <div className="min-h-screen px-3 py-10">
+      <div className="mx-auto mb-4 flex w-full max-w-4xl justify-start">
+        <a data-testid="home-link" href="https://pumpfunpirates.com" className={`${btn} drop-shadow-[0_5px_5px_#0000005b]`}>⚓ Back to pumpfunpirates.com</a>
+      </div>
       <h1 className={`wood mx-auto w-full max-w-4xl px-16 py-5 text-center ${hand} select-none text-5xl text-white sm:text-7xl`}>$AHOY VANITY WALLET GENERATOR</h1>
       <p data-testid="disclaimer-short" className="mx-auto mt-4 max-w-2xl rounded bg-ink/80 px-4 py-2 text-center text-sm text-white">⚠ <strong>Experimental, educational tool. Not for real funds or meaningful amounts.</strong> Sail at yer own risk: provided as is, no warranty, no liability for lost treasure. Full disclaimer at the bottom.</p>
 
