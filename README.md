@@ -106,3 +106,7 @@ Every push to `main` deploys to GitHub Pages through `.github/workflows/deploy.y
 
 ## Disclaimer
 This is an experimental, educational tool. It is not intended for real funds or meaningful amounts. Use it at your own risk. It is provided "as is", without warranty of any kind, express or implied. The author and maintainers (BANKSYDEGEN) accept no liability for any loss of funds, damages, or legal consequences arising from its use. Nothing here is financial, legal, or security advice. You are responsible for complying with the laws that apply to you.
+
+## License
+
+Copyright (c) 2026 BANKSYDEGEN / PUMPFUN PIRATES. All rights reserved. See [LICENSE](LICENSE).
