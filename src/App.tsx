@@ -166,7 +166,7 @@ const SAFETY_RULES: [string, string][] = [
   ['Never type it into a website.', 'Only type yer seed into the wallet app ye be importin\' it into. Why: any site or "support" agent askin\' for it be a thief.'],
   ['Close the hatch before sailin\' on.', 'Close this tab or app before ye go back online. Why: the wallet only lives in this page\'s memory, so closin\' it wipes it before any connection returns.'],
   ['Clean ship, no stowaways.', 'Use a clean device and turn off browser extensions (or open a fresh browser profile). Why: malware and extensions can read the screen and page; goin\' offline doesn\'t stop them seein\' it.'],
-  ['Only from the official port.', 'Get this tool only from banksydegen.github.io/AHOY-vanity-wallet-generator. Why: a tampered copy could look identical but quietly use weak randomness or save yer seed.'],
+  ['Only from the official port.', 'Get this tool only from wallet.pumpfunpirates.com. Why: a tampered copy could look identical but quietly use weak randomness or save yer seed.'],
   ['The words ARE the treasure.', 'Anyone with yer seed phrase owns the wallet. Never share it with any soul, not even "support". Lose it and the treasure be gone forever: nobody, us included, can recover it.'],
   ['Big hoard? Use a vault.', 'This be an experimental tool, not for meaningful amounts. For real holdings, use a hardware wallet. This tool has not been audited by a third party.'],
 ]

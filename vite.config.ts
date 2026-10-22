@@ -15,7 +15,7 @@ export default defineConfig(({ mode }) => {
   const offline = mode === 'offline'
   return {
     plugins: [react(), tailwindcss(), ...(offline ? [viteSingleFile(), offlineCsp] : [])],
-    base: offline ? './' : process.env.VITE_BASE ?? '/AHOY-vanity-wallet-generator/',
+    base: offline ? './' : process.env.VITE_BASE ?? '/',
     build: offline ? { outDir: 'dist-offline', emptyOutDir: true, copyPublicDir: false } : {},
     // Classic (iife) worker offline: Chrome won't start module workers from a file:// page.
     worker: { format: offline ? 'iife' : 'es' },

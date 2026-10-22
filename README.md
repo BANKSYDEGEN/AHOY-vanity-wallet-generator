@@ -8,7 +8,7 @@ A [PumpFun Pirates](https://pumpfunpirates.com) themed edition of [vanity-wallet
 
 Generate **Solana** or **EVM** wallets whose address starts or ends with characters you choose. Every wallet comes with a **12- or 24-word BIP39 seed phrase** (your choice; 24 is the default), so you can import it into Phantom or MetaMask.
 
-**Live:** https://banksydegen.github.io/AHOY-vanity-wallet-generator/
+**Live:** https://wallet.pumpfunpirates.com/
 
 ## 12 or 24 words?
 - **12 words (128-bit):** already effectively impossible to brute-force, and easier to write down and back up with less chance of a typo.
@@ -51,7 +51,7 @@ Read this before ye generate a wallet.
 3. **Never type it into a website.** Only enter your seed into the wallet app you're importing it into. *Why:* any site or "support" agent asking for it is a thief.
 4. **Close the hatch before sailing on.** Close the tab or app *before* you reconnect to the internet. *Why:* the wallet only lives in the page's memory, so closing it wipes it before any connection returns.
 5. **Clean ship, no stowaways.** Use a clean device and disable browser extensions (or use a fresh browser profile). *Why:* malware and extensions can read the screen and the page, and going offline doesn't stop that.
-6. **Only from the official port.** Get the site or offline file only from `https://banksydegen.github.io/AHOY-vanity-wallet-generator/`. *Why:* a tampered copy could look identical but quietly use weak randomness or save your seed.
+6. **Only from the official port.** Get the site or offline file only from `https://wallet.pumpfunpirates.com/`. *Why:* a tampered copy could look identical but quietly use weak randomness or save your seed.
 7. **The words ARE the treasure.** Anyone with your seed phrase owns the wallet. Never share it with anyone, including "support". Lose it and the funds are gone forever: nobody can recover it.
 8. **Big hoard? Use a vault.** This is an experimental tool, not for meaningful amounts. For real holdings, use a hardware wallet. This tool has **not** been audited by a third party (the crypto libraries it uses are audited; this app is not).
 
@@ -65,7 +65,7 @@ The app shows this checklist next to the **Hunt for Treasure** button and again 
 ## Run it offline (the safest way to use it)
 With no internet, nothing on the computer can send your keys anywhere while you work.
 
-1. **Download** the offline version: [AHOY-vanity-wallet-generator-offline.html](https://banksydegen.github.io/AHOY-vanity-wallet-generator/AHOY-vanity-wallet-generator-offline.html) (or use the big **Download offline version** button on the site). It's a single file with nothing to install.
+1. **Download** the offline version: [AHOY-vanity-wallet-generator-offline.html](https://wallet.pumpfunpirates.com/AHOY-vanity-wallet-generator-offline.html) (or use the big **Download offline version** button on the site). It's a single file with nothing to install.
 2. **Disconnect** from the internet (turn off Wi-Fi or unplug the cable).
 3. **Double-click** the downloaded file. It opens in your web browser.
 4. **Generate** your wallet, write the seed phrase down on paper, then close the page before you reconnect.
@@ -74,7 +74,7 @@ With no internet, nothing on the computer can send your keys anywhere while you 
 
 
 ### Check the seal (SHA-256)
-The build publishes the offline file's fingerprint next to it: [AHOY-vanity-wallet-generator-offline.html.sha256](https://banksydegen.github.io/AHOY-vanity-wallet-generator/AHOY-vanity-wallet-generator-offline.html.sha256). The site shows the same hash under the Download button. *Why:* if your file's hash matches, your copy is the official one and wasn't tampered with.
+The build publishes the offline file's fingerprint next to it: [AHOY-vanity-wallet-generator-offline.html.sha256](https://wallet.pumpfunpirates.com/AHOY-vanity-wallet-generator-offline.html.sha256). The site shows the same hash under the Download button. *Why:* if your file's hash matches, your copy is the official one and wasn't tampered with.
 
 In the folder you downloaded to, run:
 ```powershell
